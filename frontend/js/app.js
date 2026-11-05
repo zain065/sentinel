@@ -25,6 +25,11 @@ const App = {
     // Render evaluation confusion matrix
     ChartsModule.renderConfusionMatrix('evaluation-matrix-chart');
 
+    // Trigger resize event after short delay so charts adapt to container dimensions
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 250);
+
     // Periodic health check every 10 seconds
     setInterval(() => this.checkBackendHealth(), 10000);
   },

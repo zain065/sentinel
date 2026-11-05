@@ -9,6 +9,10 @@ const DashboardModule = {
   activeSearchQuery: '',
 
   async loadOverview() {
+    // 1. Immediately render Trajectory Chart so graph displays with zero latency
+    this.renderOverviewChart();
+
+    // 2. Fetch live sensor metrics from API
     try {
       const res = await fetch(`${API_BASE_URL}/sensors`);
       if (!res.ok) throw new Error('Failed to fetch sensor data');
@@ -23,9 +27,6 @@ const DashboardModule = {
 
       // Populate Sensor Dropdowns (Simulation & Detection)
       this.populateSensorDropdowns(this.allSensors);
-
-      // Render Trajectory Chart
-      this.renderOverviewChart();
 
       // Render Monitoring Grid & Trust Table
       this.renderSensorCards();
