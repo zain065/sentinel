@@ -181,6 +181,8 @@ const DashboardModule = {
       console.warn('[SENTINEL] Could not load evaluation benchmark:', e);
     }
   },
+
+  async loadAlerts() {
     const feed = document.getElementById('alerts-feed-container');
     if (!feed) return;
 
