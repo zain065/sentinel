@@ -1,61 +1,88 @@
 /**
- * SENTINEL AI - Frontend Application Entrypoint
+ * SENTINEL AI - Main Application Router & Controller
  */
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+// Dynamically use current host so it works whether opened from localhost:8000 or 127.0.0.1
+const API_BASE_URL = window.location.origin.includes('8000') 
+  ? `${window.location.origin}/api` 
+  : 'http://127.0.0.1:8000/api';
 
 const App = {
   currentTab: 'overview',
-  activeDataset: 'batadal',
 
   init() {
     this.setupNavigation();
     this.checkBackendHealth();
+    DashboardModule.setupListeners();
+    SimulationModule.init();
+
+    // Initial data load
+    DashboardModule.loadOverview();
+    DashboardModule.loadTopology();
+    DashboardModule.loadAlerts();
+
+    // Render evaluation confusion matrix
+    ChartsModule.renderConfusionMatrix('evaluation-matrix-chart');
+
+    // Periodic health check every 10 seconds
+    setInterval(() => this.checkBackendHealth(), 10000);
   },
 
   setupNavigation() {
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
+    document.querySelectorAll('.nav-item').forEach(item => {
       item.addEventListener('click', (e) => {
         e.preventDefault();
         const tab = item.getAttribute('data-tab');
         this.switchTab(tab);
       });
     });
-
-    const datasetSelect = document.getElementById('active-dataset');
-    if (datasetSelect) {
-      datasetSelect.addEventListener('change', (e) => {
-        this.activeDataset = e.target.value;
-        console.log(`[SENTINEL] Dataset switched to: ${this.activeDataset}`);
-      });
-    }
   },
 
   switchTab(tabName) {
     this.currentTab = tabName;
+
+    // Update Sidebar active state
     document.querySelectorAll('.nav-item').forEach(el => {
       el.classList.toggle('active', el.getAttribute('data-tab') === tabName);
     });
+
+    // Update Content Panel visibility
     document.querySelectorAll('.view-panel').forEach(panel => {
       panel.classList.toggle('active', panel.id === `${tabName}-view`);
     });
+
+    // Update Breadcrumb title
+    const titleEl = document.getElementById('active-tab-title');
+    if (titleEl) {
+      titleEl.textContent = tabName.toUpperCase();
+    }
+
+    // Trigger tab-specific renders or resize charts
+    if (tabName === 'overview') {
+      setTimeout(() => DashboardModule.renderOverviewChart(), 100);
+    } else if (tabName === 'evaluation') {
+      setTimeout(() => ChartsModule.renderConfusionMatrix('evaluation-matrix-chart'), 100);
+    } else if (tabName === 'trust') {
+      setTimeout(() => DashboardModule.renderTrustTable(), 100);
+    }
   },
 
   async checkBackendHealth() {
-    const statusEl = document.getElementById('backend-status');
-    const indicatorEl = document.querySelector('.status-indicator');
+    const statusDot = document.getElementById('status-dot');
+    const statusText = document.getElementById('backend-status-text');
+
     try {
       const res = await fetch(`${API_BASE_URL}/health`, { signal: AbortSignal.timeout(3000) });
       if (res.ok) {
-        statusEl.textContent = 'Online';
-        indicatorEl?.classList.add('online');
+        statusDot?.classList.add('online');
+        if (statusText) statusText.textContent = 'ONLINE (Port 8000)';
       } else {
-        statusEl.textContent = 'Degraded';
+        statusDot?.classList.remove('online');
+        if (statusText) statusText.textContent = 'DEGRADED';
       }
     } catch {
-      statusEl.textContent = 'Offline (Run backend)';
-      indicatorEl?.classList.remove('online');
+      statusDot?.classList.remove('online');
+      if (statusText) statusText.textContent = 'OFFLINE (Run FastAPI)';
     }
   }
 };

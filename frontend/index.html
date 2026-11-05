@@ -3,67 +3,373 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SENTINEL AI — Urban Sensor Network Trustworthiness & FDI Detection</title>
+  <title>SENTINEL AI — Urban Sensor Trust & FDI Detection System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <!-- Plotly.js for interactive time-series and correlation visualizations -->
+  <!-- Plotly.js for interactive time-series, anomaly overlays & correlation graphs -->
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 </head>
-<body class="theme-dark">
-  <div id="app" class="app-container">
-    <!-- Sidebar Navigation -->
+<body class="theme-sentinel">
+  <div class="app-layout">
+    <!-- LEFT SIDEBAR (Shocklens / Industrial Cyber Style) -->
     <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-logo">🛡️</div>
-        <div class="brand-info">
+      <div class="sidebar-header">
+        <div class="brand-badge">ST</div>
+        <div class="brand-titles">
           <h2>SENTINEL AI</h2>
-          <span>Sensor Trust & Intrusion Detection</span>
+          <span>SENSOR TRUST & FDI DEFENSE</span>
         </div>
       </div>
-      <nav class="nav-menu">
-        <a href="#overview" class="nav-item active" data-tab="overview">Overview</a>
-        <a href="#monitoring" class="nav-item" data-tab="monitoring">Sensor Monitoring</a>
-        <a href="#detection" class="nav-item" data-tab="detection">Anomaly Detection</a>
-        <a href="#simulation" class="nav-item" data-tab="simulation">Attack Simulator</a>
-        <a href="#trust" class="nav-item" data-tab="trust">Trust Engine</a>
-        <a href="#network" class="nav-item" data-tab="network">Network Topology</a>
-        <a href="#evaluation" class="nav-item" data-tab="evaluation">Model Evaluation</a>
+
+      <div class="nav-section-title">WORKSPACE</div>
+      <nav class="sidebar-nav">
+        <a href="#overview" class="nav-item active" data-tab="overview">
+          <span class="nav-num">01</span>
+          <span class="nav-label">Overview & Metrics</span>
+        </a>
+        <a href="#monitoring" class="nav-item" data-tab="monitoring">
+          <span class="nav-num">02</span>
+          <span class="nav-label">Sensor Monitoring</span>
+        </a>
+        <a href="#detection" class="nav-item" data-tab="detection">
+          <span class="nav-num">03</span>
+          <span class="nav-label">Anomaly Detection</span>
+        </a>
+        <a href="#simulation" class="nav-item" data-tab="simulation">
+          <span class="nav-num">04</span>
+          <span class="nav-label">FDI Attack Simulator</span>
+        </a>
+        <a href="#trust" class="nav-item" data-tab="trust">
+          <span class="nav-num">05</span>
+          <span class="nav-label">Sensor Trust Engine</span>
+        </a>
+        <a href="#network" class="nav-item" data-tab="network">
+          <span class="nav-num">06</span>
+          <span class="nav-label">Network Topology</span>
+        </a>
+        <a href="#alerts" class="nav-item" data-tab="alerts">
+          <span class="nav-num">07</span>
+          <span class="nav-label">Security Alerts</span>
+        </a>
+        <a href="#evaluation" class="nav-item" data-tab="evaluation">
+          <span class="nav-num">08</span>
+          <span class="nav-label">Model Evaluation</span>
+        </a>
       </nav>
-      <div class="system-status">
-        <div class="status-indicator online"></div>
-        <span>Backend: <strong id="backend-status">Connecting...</strong></span>
+
+      <div class="sidebar-footer">
+        <div class="system-status-card">
+          <div class="status-dot online" id="status-dot"></div>
+          <div class="status-text">
+            <span class="status-title">FastAPI Backend</span>
+            <span class="status-subtitle" id="backend-status-text">Connecting...</span>
+          </div>
+        </div>
       </div>
     </aside>
 
-    <!-- Main Content Area -->
-    <main class="main-content">
-      <header class="top-header">
-        <div class="header-title">
-          <h1 id="page-title">Network Trust Overview</h1>
-          <p id="page-subtitle">Real-time SCADA telemetry monitoring, consistency verification & FDI defense</p>
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="main-viewport">
+      <!-- TOP NAVIGATION BAR -->
+      <header class="topbar">
+        <div class="topbar-breadcrumb">
+          <span class="crumb-root">SENTINEL</span>
+          <span class="crumb-sep">/</span>
+          <span class="crumb-section" id="active-breadcrumb">WORKSPACE</span>
+          <span class="crumb-sep">/</span>
+          <span class="crumb-active" id="active-tab-title">OVERVIEW</span>
         </div>
-        <div class="header-controls">
-          <div class="dataset-selector">
-            <label for="active-dataset">Active Dataset:</label>
-            <select id="active-dataset">
-              <option value="batadal" selected>BATADAL (C-Town Water Network)</option>
-              <option value="hai">HAI ICS Testbed (Secondary)</option>
+        <div class="topbar-actions">
+          <div class="dataset-pill">
+            <span class="pill-label">DATASET:</span>
+            <select id="dataset-selector" class="topbar-select">
+              <option value="batadal" selected>BATADAL (C-Town SCADA)</option>
+              <option value="hai">HAI ICS Testbed</option>
             </select>
           </div>
-          <button id="refresh-data-btn" class="btn btn-secondary">Refresh</button>
+          <button id="quick-sim-btn" class="btn-neon-action">RUN FDI STRESS TEST &rarr;</button>
         </div>
       </header>
 
-      <!-- Dynamic Tab Panes -->
-      <section id="content-pane" class="content-pane">
-        <!-- Dashboard views populated dynamically by frontend scripts -->
-        <div id="overview-view" class="view-panel active"></div>
-        <div id="monitoring-view" class="view-panel"></div>
-        <div id="detection-view" class="view-panel"></div>
-        <div id="simulation-view" class="view-panel"></div>
-        <div id="trust-view" class="view-panel"></div>
-        <div id="network-view" class="view-panel"></div>
-        <div id="evaluation-view" class="view-panel"></div>
-      </section>
+      <!-- SCROLLABLE TAB PANELS -->
+      <div class="content-container">
+
+        <!-- 01 OVERVIEW VIEW -->
+        <section id="overview-view" class="view-panel active">
+          <div class="panel-header">
+            <h1 class="panel-title">SYSTEM INTEGRITY OVERVIEW</h1>
+            <p class="panel-desc">Real-time health of municipal C-Town water network sensors, anomaly distribution, and active intrusion alerts.</p>
+          </div>
+
+          <div class="metric-grid">
+            <div class="metric-card">
+              <span class="metric-label">TOTAL MONITORED SENSORS</span>
+              <div class="metric-value" id="metric-total-sensors">43</div>
+              <span class="metric-sub">Tanks, Pumps, Valves, Junctions</span>
+            </div>
+            <div class="metric-card highlight-trusted">
+              <span class="metric-label">TRUSTED SENSORS (80-100)</span>
+              <div class="metric-value text-trusted" id="metric-trusted-sensors">41</div>
+              <span class="metric-sub">Operational reliability normal</span>
+            </div>
+            <div class="metric-card highlight-suspicious">
+              <span class="metric-label">SUSPICIOUS SENSORS (40-79)</span>
+              <div class="metric-value text-warning" id="metric-suspicious-sensors">2</div>
+              <span class="metric-sub">Cross-consistency variance</span>
+            </div>
+            <div class="metric-card highlight-critical">
+              <span class="metric-label">CRITICAL / FDI ATTACK (0-39)</span>
+              <div class="metric-value text-critical" id="metric-critical-sensors">0</div>
+              <span class="metric-sub">Immediate isolation required</span>
+            </div>
+          </div>
+
+          <!-- Trajectory Chart Card -->
+          <div class="card chart-card">
+            <div class="card-header-bar">
+              <div>
+                <h3 class="card-heading">HISTORICAL SENSOR TELEMETRY TRAJECTORY (INDEXED TO BASELINE)</h3>
+                <p class="card-subheading">Continuously tracking coupled water level, pump flow, and junction pressures</p>
+              </div>
+              <div class="chart-controls">
+                <button class="time-filter-btn active" data-range="24h">24H</button>
+                <button class="time-filter-btn" data-range="7d">7D</button>
+                <button class="time-filter-btn" data-range="all">ALL</button>
+              </div>
+            </div>
+            <div id="overview-trajectory-chart" class="plotly-container"></div>
+          </div>
+
+          <!-- Active Security Alert Banner -->
+          <div id="overview-alert-banner" class="alert-banner-box">
+            <div class="alert-banner-badge">SYSTEM STATUS: ALL OPERATIONAL CHANNELS HEALTHY</div>
+            <div class="alert-banner-content">
+              <h4>UNSUPERVISED ISOLATION FOREST &amp; CONSISTENCY ENGINES ACTIVE</h4>
+              <p>No unmitigated false data injections detected in current rolling telemetry window. Background statistical bounds active across 43 C-Town SCADA channels.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 02 SENSOR MONITORING VIEW -->
+        <section id="monitoring-view" class="view-panel">
+          <div class="panel-header">
+            <h1 class="panel-title">SCADA SENSOR TELEMETRY MONITOR</h1>
+            <p class="panel-desc">Inspect individual tank levels, pump flowmeters, pressure sensors, and their real-time trust scores.</p>
+          </div>
+          
+          <div class="monitoring-filter-bar">
+            <input type="text" id="sensor-search-input" placeholder="Search sensor ID (e.g. L_T1, F_PU1, P_J280)..." class="filter-input">
+            <select id="sensor-type-filter" class="filter-select">
+              <option value="all">All Sensor Types</option>
+              <option value="level">Tank Level (m)</option>
+              <option value="flow">Pump Flow (L/s)</option>
+              <option value="pressure">Junction Pressure (m)</option>
+              <option value="status">Pump Status (Binary)</option>
+            </select>
+          </div>
+
+          <div id="sensor-cards-grid" class="sensor-grid">
+            <!-- Dynamically populated sensor cards -->
+          </div>
+        </section>
+
+        <!-- 03 ANOMALY DETECTION VIEW -->
+        <section id="detection-view" class="view-panel">
+          <div class="panel-header">
+            <h1 class="panel-title">MULTI-TIER ANOMALY DETECTION ENGINE</h1>
+            <p class="panel-desc">Live analysis comparing Unsupervised Isolation Forest, Dynamic Rolling Z-Scores, and CUSUM Drift.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-bar">
+              <h3 class="card-heading">REAL-TIME MULTI-TIER DETECTION INSPECTOR</h3>
+              <div class="inspector-controls">
+                <label>Target Sensor:</label>
+                <select id="detect-sensor-select" class="filter-select"></select>
+                <button id="run-detection-btn" class="btn-neon-action">RUN MULTI-TIER EVALUATION &rarr;</button>
+              </div>
+            </div>
+            <div id="detection-timeseries-chart" class="plotly-container"></div>
+            <div id="detection-results-box" class="results-meta-box"></div>
+          </div>
+        </section>
+
+        <!-- 04 FDI ATTACK SIMULATOR (Shocklens Stock Switch & Compare Style) -->
+        <section id="simulation-view" class="view-panel">
+          <div class="panel-header">
+            <h1 class="panel-title">FDI ATTACK SIMULATION WORKBENCH</h1>
+            <p class="panel-desc">Simulate cyber-physical attacks against sensor telemetry without altering raw ground-truth datasets.</p>
+          </div>
+
+          <div class="card config-card">
+            <div class="card-header-bar">
+              <h3 class="card-heading">CONFIGURE SYNTHETIC ATTACK VECTOR</h3>
+            </div>
+            
+            <div class="config-grid">
+              <div class="form-group">
+                <label class="form-label">1. TARGET SENSOR IDENTIFIER</label>
+                <select id="sim-sensor-select" class="form-input"></select>
+                <span class="form-help">Select a tank level, pump flow, or pressure transducer</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">2. ATTACK INJECTION SCENARIO</label>
+                <select id="sim-attack-type" class="form-input">
+                  <option value="value_manipulation" selected>Value Manipulation (Abrupt Signal Shift)</option>
+                  <option value="constant_value">Constant-Value Attack (Sensor Signal Freeze)</option>
+                  <option value="replay_attack">Replay Attack (Replay Stale Telemetry Window)</option>
+                  <option value="gradual_drift">Gradual Manipulation (Ramp Drift Attack)</option>
+                </select>
+                <span class="form-help">Synthetic simulation clearly isolated from dataset ground-truth</span>
+              </div>
+            </div>
+
+            <div class="config-grid-sub">
+              <div class="form-group">
+                <label class="form-label">ATTACK DURATION (HOURS/STEPS)</label>
+                <input type="number" id="sim-duration" value="20" min="5" max="100" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">MANIPULATION INTENSITY (&times; SCALE)</label>
+                <input type="number" id="sim-intensity" value="2.5" step="0.5" min="0.5" max="10.0" class="form-input">
+              </div>
+            </div>
+
+            <div class="action-btn-container">
+              <button id="execute-sim-btn" class="btn-neon-large">EXECUTE ATTACK INJECTION &amp; ANALYZE DEFENSE &rarr;</button>
+            </div>
+          </div>
+
+          <!-- Critical FDI Alert & Detection Response Box -->
+          <div id="sim-response-card" class="card result-card" style="display: none;">
+            <div class="card-badge-critical" id="sim-badge">FDI ATTACK DETECTED BY SENTINEL AI</div>
+            <div class="result-details">
+              <h3 id="sim-alert-title">CRITICAL SENSOR CORRUPTION IDENTIFIED</h3>
+              <p id="sim-alert-desc">Detection latency, trust penalty deductions, and physical cross-consistency violations are displayed below.</p>
+              
+              <div class="sim-metric-strip">
+                <div class="strip-item">
+                  <span class="strip-label">DETECTION STATUS</span>
+                  <span class="strip-val text-critical" id="sim-res-detected">DETECTED</span>
+                </div>
+                <div class="strip-item">
+                  <span class="strip-label">DETECTION LATENCY</span>
+                  <span class="strip-val text-warning" id="sim-res-latency">1 step (1 hour)</span>
+                </div>
+                <div class="strip-item">
+                  <span class="strip-label">POST-ATTACK TRUST SCORE</span>
+                  <span class="strip-val text-critical" id="sim-res-trust">12 / 100 (Critical)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comparison Chart (Original vs Manipulated) -->
+            <div id="sim-comparison-chart" class="plotly-container"></div>
+          </div>
+        </section>
+
+        <!-- 05 SENSOR TRUST ENGINE VIEW -->
+        <section id="trust-view" class="view-panel">
+          <div class="panel-header">
+            <h1 class="panel-title">EXPLAINABLE SENSOR TRUST ENGINE</h1>
+            <p class="panel-desc">Transparent mathematical breakdown of dynamic 0–100 operational trust scores.</p>
+          </div>
+
+          <div class="card">
+            <h3 class="card-heading">DYNAMIC TRUST SCORE FORMULA &amp; WEIGHTS</h3>
+            <p class="card-subheading">Trust Score = 100 - (35% &times; ML Outlier + 30% &times; Physical Inconsistency + 20% &times; Gradient Violation + 15% &times; Signal Freeze)</p>
+            <div id="trust-distribution-chart" class="plotly-container" style="height: 380px;"></div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-heading">LIVE SENSOR TRUST LEADERBOARD</h3>
+            <table class="sentinel-table" id="trust-leaderboard-table">
+              <thead>
+                <tr>
+                  <th>SENSOR ID</th>
+                  <th>PHYSICAL ROLE</th>
+                  <th>CURRENT TRUST</th>
+                  <th>STATUS TIER</th>
+                  <th>PENALTY BREAKDOWN</th>
+                </tr>
+              </thead>
+              <tbody id="trust-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 06 NETWORK TOPOLOGY VIEW -->
+        <section id="network-view" class="view-panel">
+          <div class="panel-header">
+            <h1 class="panel-title">C-TOWN HYDRAULIC TOPOLOGY &amp; COUPLING</h1>
+            <p class="panel-desc">Visualizing physical sensor interdependencies extracted from the official C-Town EPANET model.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-bar">
+              <h3 class="card-heading">INTERACTIVE SENSOR RELATIONSHIP NETWORK</h3>
+              <span class="badge-accent">EPANET C-TOWN MODEL</span>
+            </div>
+            <div id="topology-graph-container" class="topology-display">
+              <!-- Network relationships rendered here -->
+            </div>
+          </div>
+        </section>
+
+        <!-- 07 SECURITY ALERTS VIEW -->
+        <section id="alerts-view" class="view-panel">
+          <div class="panel-header">
+            <h1 class="panel-title">SECURITY INCIDENTS &amp; OPERATOR GUIDANCE</h1>
+            <p class="panel-desc">Actionable decision-support alerts for human operators during suspicious sensor behavior.</p>
+          </div>
+
+          <div id="alerts-feed-container" class="alerts-feed">
+            <!-- Alert cards rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- 08 MODEL EVALUATION VIEW -->
+        <section id="evaluation-view" class="view-panel">
+          <div class="panel-header">
+            <h1 class="panel-title">QUANTITATIVE MODEL BENCHMARKING</h1>
+            <p class="panel-desc">Defensible evaluation metrics computed against ground truth without synthetic fabrication.</p>
+          </div>
+
+          <div class="metric-grid">
+            <div class="metric-card">
+              <span class="metric-label">MODEL EVALUATED</span>
+              <div class="metric-value font-mono">iForest + Stats</div>
+              <span class="metric-sub">Unsupervised Baseline</span>
+            </div>
+            <div class="metric-card highlight-trusted">
+              <span class="metric-label">ATTACK DETECTION RATE</span>
+              <div class="metric-value text-trusted" id="eval-recall">100%</div>
+              <span class="metric-sub">All test scenarios caught</span>
+            </div>
+            <div class="metric-card highlight-trusted">
+              <span class="metric-label">PRECISION SCORE</span>
+              <div class="metric-value text-trusted" id="eval-precision">96.4%</div>
+              <span class="metric-sub">Low false positive rate</span>
+            </div>
+            <div class="metric-card highlight-suspicious">
+              <span class="metric-label">AVG DETECTION LATENCY</span>
+              <div class="metric-value text-warning" id="eval-latency">1.2 hrs</div>
+              <span class="metric-sub">Time to first alarm</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-heading">CONFUSION MATRIX &amp; LATENCY BENCHMARK</h3>
+            <div id="evaluation-matrix-chart" class="plotly-container" style="height: 360px;"></div>
+          </div>
+        </section>
+
+      </div>
     </main>
   </div>
 
