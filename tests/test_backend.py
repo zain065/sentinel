@@ -22,7 +22,7 @@ from app.detection.consistency import ConsistencyVerifier
 from app.detection.attack_simulator import AttackSimulator
 from app.trust.trust_engine import TrustEngine
 from app.models.evaluation import ModelEvaluator
-from app.api.routes import health_check, get_dataset_status, list_sensors, run_detection, simulate_attack, DetectionRequest, SimulationRequest
+from app.api.routes import health_check, get_dataset_status, list_sensors, run_detection, simulate_attack, chat_with_assistant, DetectionRequest, SimulationRequest, ChatRequest
 
 
 class TestSentinelBackend(unittest.TestCase):
@@ -130,6 +130,16 @@ class TestSentinelBackend(unittest.TestCase):
         self.assertEqual(metrics["precision"], 1.0)
         self.assertEqual(metrics["recall"], 0.8)
         self.assertEqual(report["latency"]["total_attacks"], 2)
+
+    def test_chatbot_route(self):
+        """Verify smart city AI chatbot route responds with domain explanations."""
+        req = ChatRequest(message="What is sensor L_T1 and how does FDI affect it?")
+        resp = chat_with_assistant(req)
+        self.assertIn("reply", resp)
+        self.assertIn("suggested_queries", resp)
+        self.assertIn("referenced_sensors", resp)
+        self.assertGreater(len(resp["reply"]), 50)
+        self.assertTrue(any(s["sensor_id"] == "L_T1" for s in resp["referenced_sensors"]))
 
 
 if __name__ == "__main__":

@@ -57,6 +57,10 @@
           <span class="nav-num">08</span>
           <span class="nav-label">Model Evaluation</span>
         </a>
+        <a href="#chatbot" class="nav-item" data-tab="chatbot">
+          <span class="nav-num">09</span>
+          <span class="nav-label">Smart City AI Copilot</span>
+        </a>
       </nav>
 
       <div class="sidebar-footer">
@@ -89,6 +93,7 @@
               <option value="hai">HAI ICS Testbed</option>
             </select>
           </div>
+          <button id="open-chatbot-btn" class="btn-neon-action" style="background:#d4ff00; color:#0d1117;">✨ ASK AI COPILOT</button>
           <button id="quick-sim-btn" class="btn-neon-action">RUN FDI STRESS TEST &rarr;</button>
         </div>
       </header>
@@ -369,6 +374,72 @@
           </div>
         </section>
 
+        <!-- 09 SMART CITY AI COPILOT VIEW -->
+        <section id="chatbot-view" class="view-panel">
+          <div class="panel-header">
+            <h1 class="panel-title">SMART CITY SCADA AI COPILOT</h1>
+            <p class="panel-desc">Conversational cyber-physical intelligence for municipal water telemetry, C-Town hydraulic physics, and real-time False Data Injection (FDI) intrusion response.</p>
+          </div>
+
+          <div class="card chat-workspace-card">
+            <div class="card-header-bar chat-header-bar">
+              <div class="chat-status-indicator">
+                <span class="chat-pulse-dot"></span>
+                <span class="chat-status-label">SENTINEL AI COPILOT &bull; C-TOWN EPANET SCADA ADVISOR</span>
+              </div>
+              <button id="chat-clear-btn" class="btn-chat-action">RESET SESSION</button>
+            </div>
+
+            <!-- Quick Suggestion Chips -->
+            <div class="chat-suggestions-bar">
+              <span class="suggestions-label">SUGGESTED QUERIES:</span>
+              <div class="suggestions-chips-wrapper">
+                <button class="chat-suggestion-chip" data-query="Analyze overall smart city network health and sensor trust">🛡️ Network Health Status</button>
+                <button class="chat-suggestion-chip" data-query="What is sensor L_T1 and what are its coupled peers?">💧 Diagnose Tank L_T1</button>
+                <button class="chat-suggestion-chip" data-query="Explain how False Data Injection attacks corrupt water distribution">⚡ Explain FDI Cyberattacks</button>
+                <button class="chat-suggestion-chip" data-query="Explain C-Town EPANET network structure and datasets">🌊 C-Town &amp; EPANET Model</button>
+                <button class="chat-suggestion-chip" data-query="How is the 0-100 dynamic sensor trust score calculated?">🧮 Trust Score Formula</button>
+                <button class="chat-suggestion-chip" data-query="List all 8 junction pressure sensors in C-Town">🔍 Junction Pressures</button>
+              </div>
+            </div>
+
+            <!-- Chat Transcript -->
+            <div id="chat-messages-container" class="chat-transcript-area">
+              <div class="chat-message bot-msg">
+                <div class="msg-avatar">
+                  <div class="avatar-badge">AI</div>
+                </div>
+                <div class="msg-bubble">
+                  <div class="msg-header-row">
+                    <span class="msg-author">SENTINEL AI SMART CITY ADVISOR</span>
+                    <span class="msg-time">LIVE ADVISOR</span>
+                  </div>
+                  <div class="msg-content">
+                    <p><strong>Welcome, Operator.</strong> I am your AI Copilot for the <strong>C-Town Municipal Water Distribution Network (BATADAL SCADA)</strong>.</p>
+                    <p>I can provide comprehensive explanations on:</p>
+                    <ul class="chat-list">
+                      <li><strong>Sensor Diagnostics &amp; Physical Roles:</strong> Ask about any of the 43 telemetry channels (e.g. <code>L_T1</code>, <code>F_PU1</code>, <code>P_J280</code>).</li>
+                      <li><strong>Topological Consistency:</strong> Inspect physical coupling between storage tanks, pump stations, and arterial junction pressures.</li>
+                      <li><strong>FDI Cyber Defense:</strong> Understand how SENTINEL detects value manipulation, sensor freezes, replay attacks, and creeping drift.</li>
+                      <li><strong>Live Network Health:</strong> Get real-time status summaries of trusted, suspicious, and critical sensors.</li>
+                    </ul>
+                    <p>Click any suggested prompt above or type your question below!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="chat-input-wrapper">
+              <input type="text" id="chat-input" class="chat-text-input" placeholder="Ask anything about C-Town sensors, telemetry data, attacks, or smart city health..." autocomplete="off">
+              <button id="chat-send-btn" class="btn-chat-send">
+                <span>SEND</span>
+                <span class="send-arrow">&rarr;</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
       </div>
     </main>
   </div>
@@ -376,6 +447,7 @@
   <script src="js/charts.js"></script>
   <script src="js/dashboard.js"></script>
   <script src="js/simulation.js"></script>
+  <script src="js/chatbot.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

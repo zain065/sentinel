@@ -15,6 +15,7 @@ const App = {
     this.checkBackendHealth();
     DashboardModule.setupListeners();
     SimulationModule.init();
+    ChatbotModule.init();
 
     // Initial data load
     DashboardModule.loadOverview();

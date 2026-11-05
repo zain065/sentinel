@@ -195,6 +195,7 @@ python tests/test_backend.py
 | `GET` | `/api/alerts` | List active advisory security alerts |
 | `GET` | `/api/topology` | C-Town hydraulic nodes and topological edges |
 | `GET` | `/api/evaluation/benchmark` | Measured benchmark metrics and confusion matrix |
+| `POST` | `/api/chat` | Conversational Smart City AI Copilot for SCADA & FDI diagnostics |
 
 ---
 
@@ -216,6 +217,10 @@ python tests/test_backend.py
    * Point to the dual-line Plotly chart showing clean ground truth vs. injected attack stream with the attack window shaded.
 4. **Show Model Benchmarks (`#evaluation`):**
    * Show that the model was trained on official research data: **91.6% Accuracy**, **100% Attack Detection Rate (5/5 attacks detected)**, and the live Confusion Matrix heatmap.
+5. **Demonstrate Smart City AI Copilot (`#chatbot`):**
+   * Click **"✨ ASK AI COPILOT"** or switch to **Tab 09**.
+   * Click suggested chips like *"💧 Diagnose Tank L_T1"* or *"🛡️ Network Health Status"*.
+   * Show how the AI provides deep domain engineering details, identifies physically coupled peers from the EPANET model, and renders interactive sensor cards with live trust scores.
 
 ---
 

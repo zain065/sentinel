@@ -21,6 +21,7 @@ from app.detection.consistency import ConsistencyVerifier
 from app.detection.attack_simulator import AttackSimulator
 from app.trust.trust_engine import TrustEngine
 from app.analysis.impact_analysis import ImpactAnalysisEngine
+from app.analysis.chatbot import SmartCityChatbot
 from app.models.evaluation import ModelEvaluator
 
 router = APIRouter()
@@ -31,6 +32,7 @@ validator = DataValidator()
 trust_engine = TrustEngine()
 stat_detector = StatisticalDetector()
 consistency_verifier = ConsistencyVerifier()
+chatbot = SmartCityChatbot(trust_engine=trust_engine)
 
 
 # Pydantic Schemas
@@ -53,6 +55,11 @@ class SimulationRequest(BaseModel):
     start_index: int = Field(default=10, ge=0)
     duration_steps: int = Field(default=20, ge=1, le=200)
     intensity: float = Field(default=1.5, ge=0.1, le=10.0)
+
+
+class ChatRequest(BaseModel):
+    message: str = Field(..., min_length=1, max_length=1000)
+    history: Optional[List[Dict[str, str]]] = None
 
 
 # 1. Health Endpoint
@@ -315,3 +322,10 @@ def get_network_topology():
         "nodes": nodes,
         "edges": edges
     }
+
+
+# 9. Smart City AI Chatbot Endpoint
+@router.post("/chat")
+def chat_with_assistant(payload: ChatRequest):
+    """Provides domain intelligence and technical explanations on smart city SCADA telemetry."""
+    return chatbot.process_message(payload.message, payload.history)
