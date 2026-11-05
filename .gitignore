@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# Virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variables
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# Generated files
+*.log
+.DS_Store
+*.sqlite
+*.db
+
+# Model artifacts
+models/saved/*
+!models/saved/.gitkeep
+
+# Dataset files (exclude raw and processed data from repo)
+data/raw/**/*.csv
+data/raw/**/*.zip
+data/raw/**/*.inp
+data/processed/*
+!data/**/.gitkeep
+!data/processed/.gitkeep
+
+# Temporary files
+temp/
+scratch/
