@@ -112,3 +112,4 @@ class ConsistencyVerifier:
             "discrepancies": discrepancies,
             "coupled_peers_checked": peer_checks
         }
+

@@ -7,6 +7,7 @@ from typing import Dict, List, Optional, Tuple, Any
 import os
 import re
 import pandas as pd
+import numpy as np
 from app.config import settings, BATADAL_SENSORS, TOPOLOGICAL_COUPLES
 from app.data.validation import DataValidator
 
@@ -92,10 +93,11 @@ class BatadalLoader:
         df, ts_col = self.validator.parse_timestamps(df)
         df = self.validator.handle_missing_values(df)
         
-        # Standardize attack flag column if present
+        # Standardize attack flag column if present (in BATADAL, 1 = attack, -999 = normal)
         for col in ["ATT_FLAG", "att_flag", "Attack", "ATTACK", "label"]:
             if col in df.columns:
-                df["ATT_FLAG"] = df[col].astype(int)
+                raw_flags = df[col].astype(int)
+                df["ATT_FLAG"] = np.where(raw_flags == 1, 1, 0)
                 if col != "ATT_FLAG":
                     df.drop(columns=[col], inplace=True)
                 break
@@ -158,3 +160,4 @@ class BatadalLoader:
             "junctions_count": len(sections.get("JUNCTIONS", [])),
             "coupled_relationships": TOPOLOGICAL_COUPLES
         }
+

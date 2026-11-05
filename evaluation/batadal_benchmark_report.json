@@ -1,0 +1,69 @@
+{
+  "dataset": "BATADAL (C-Town Water Distribution SCADA)",
+  "training_dataset_1_samples": 8761,
+  "evaluation_dataset_2_samples": 4177,
+  "models": {
+    "isolation_forest": {
+      "model_name": "Isolation Forest (Unsupervised)",
+      "total_samples": 4177,
+      "attack_samples": 219,
+      "normal_samples": 3958,
+      "metrics": {
+        "accuracy": 0.9164,
+        "precision": 0.1579,
+        "recall": 0.137,
+        "f1_score": 0.1467,
+        "false_positive_rate": 0.0404
+      },
+      "confusion_matrix": {
+        "true_negatives": 3798,
+        "false_positives": 160,
+        "false_negatives": 189,
+        "true_positives": 30
+      },
+      "latency": {
+        "total_attacks": 5,
+        "detected_attacks": 5,
+        "detection_rate": 1.0,
+        "mean_latency_steps": 8.8,
+        "median_latency_steps": 5.0,
+        "individual_latencies": [
+          21,
+          5,
+          11,
+          3,
+          4
+        ]
+      }
+    },
+    "statistical_baseline": {
+      "model_name": "Statistical Baseline (Z-Score + Flatline)",
+      "total_samples": 4177,
+      "attack_samples": 219,
+      "normal_samples": 3958,
+      "metrics": {
+        "accuracy": 0.948,
+        "precision": 0.75,
+        "recall": 0.0137,
+        "f1_score": 0.0269,
+        "false_positive_rate": 0.0003
+      },
+      "confusion_matrix": {
+        "true_negatives": 3957,
+        "false_positives": 1,
+        "false_negatives": 216,
+        "true_positives": 3
+      },
+      "latency": {
+        "total_attacks": 5,
+        "detected_attacks": 1,
+        "detection_rate": 0.2,
+        "mean_latency_steps": 50.0,
+        "median_latency_steps": 50.0,
+        "individual_latencies": [
+          50
+        ]
+      }
+    }
+  }
+}

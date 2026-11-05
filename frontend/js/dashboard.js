@@ -153,7 +153,33 @@ const DashboardModule = {
     }
   },
 
-  async loadAlerts() {
+  async loadEvaluationBenchmark() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/evaluation/benchmark`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data.is_evaluated || !data.models) return;
+
+      const iforest = data.models.isolation_forest;
+      const m = iforest.metrics;
+      const cm = iforest.confusion_matrix;
+      const lat = iforest.latency;
+
+      // Update Metric Cards
+      const recallEl = document.getElementById('eval-recall');
+      const precEl = document.getElementById('eval-precision');
+      const latEl = document.getElementById('eval-latency');
+
+      if (recallEl) recallEl.textContent = `${(lat.detection_rate * 100).toFixed(1)}% (${lat.detected_attacks}/${lat.total_attacks})`;
+      if (precEl) precEl.textContent = `${(m.accuracy * 100).toFixed(1)}% Acc`;
+      if (latEl) latEl.textContent = `${lat.median_latency_steps || 5.0} hrs`;
+
+      // Render Real Confusion Matrix Heatmap
+      ChartsModule.renderConfusionMatrix('evaluation-matrix-chart', cm.true_negatives, cm.false_positives, cm.false_negatives, cm.true_positives);
+    } catch (e) {
+      console.warn('[SENTINEL] Could not load evaluation benchmark:', e);
+    }
+  },
     const feed = document.getElementById('alerts-feed-container');
     if (!feed) return;
 

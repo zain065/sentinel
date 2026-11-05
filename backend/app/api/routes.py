@@ -270,7 +270,22 @@ def get_security_alerts(db: Session = Depends(get_db)):
     }
 
 
-# 7. Topology Graph
+# 8. Evaluation Benchmark
+@router.get("/evaluation/benchmark")
+def get_evaluation_benchmark():
+    """Returns official BATADAL evaluation metrics and confusion matrix from disk."""
+    report_path = settings.EVALUATION_DIR / "batadal_benchmark_report.json"
+    if not report_path.exists():
+        return {
+            "is_evaluated": False,
+            "message": "Evaluation report not generated yet. Run train_batadal.py."
+        }
+    import json
+    with open(report_path, "r") as f:
+        data = json.load(f)
+    data["is_evaluated"] = True
+    return data
+
 @router.get("/topology")
 def get_network_topology():
     """Returns C-Town water network nodes and topological links for network visualization."""

@@ -88,3 +88,4 @@ class AttackSimulator:
             "manipulated_series": manipulated_values[start_index - 5: end_index + 5].tolist() if start_index >= 5 else manipulated_values[:end_index + 5].tolist(),
             "attack_indices": attack_indices
         }
+

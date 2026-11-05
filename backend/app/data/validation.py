@@ -75,3 +75,4 @@ class DataValidator:
             numeric_cols = df.select_dtypes(include=[np.number]).columns
             df[numeric_cols] = df[numeric_cols].interpolate(method="linear").ffill().bfill()
         return df
+

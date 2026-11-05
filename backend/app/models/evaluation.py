@@ -89,3 +89,4 @@ class ModelEvaluator:
                 "individual_latencies": latencies
             }
         }
+

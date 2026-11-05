@@ -114,3 +114,4 @@ class IsolationForestDetector:
         instance.baseline_median = data["baseline_median"]
         instance.baseline_iqr = data["baseline_iqr"]
         return instance
+

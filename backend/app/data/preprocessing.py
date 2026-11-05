@@ -97,3 +97,4 @@ class PreprocessingPipeline:
         instance.is_fitted = data["is_fitted"]
         instance.sensor_stats = data["sensor_stats"]
         return instance
+

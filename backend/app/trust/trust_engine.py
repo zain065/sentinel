@@ -118,3 +118,4 @@ class TrustEngine:
         """Resets a sensor's trust score to baseline 100."""
         self.trust_states[sensor_id] = 100.0
         self.consecutive_normal_steps[sensor_id] = 0
+

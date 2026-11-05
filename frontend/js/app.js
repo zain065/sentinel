@@ -20,6 +20,7 @@ const App = {
     DashboardModule.loadOverview();
     DashboardModule.loadTopology();
     DashboardModule.loadAlerts();
+    DashboardModule.loadEvaluationBenchmark();
 
     // Render evaluation confusion matrix
     ChartsModule.renderConfusionMatrix('evaluation-matrix-chart');
@@ -61,7 +62,7 @@ const App = {
     if (tabName === 'overview') {
       setTimeout(() => DashboardModule.renderOverviewChart(), 100);
     } else if (tabName === 'evaluation') {
-      setTimeout(() => ChartsModule.renderConfusionMatrix('evaluation-matrix-chart'), 100);
+      setTimeout(() => DashboardModule.loadEvaluationBenchmark(), 100);
     } else if (tabName === 'trust') {
       setTimeout(() => DashboardModule.renderTrustTable(), 100);
     }
