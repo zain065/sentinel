@@ -39,3 +39,4 @@ data/processed/*
 # Temporary files
 temp/
 scratch/
+*.pdf
