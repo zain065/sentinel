@@ -40,3 +40,4 @@ data/processed/*
 temp/
 scratch/
 *.pdf
+build_deck_pdf.py
